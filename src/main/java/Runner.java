@@ -1,4 +1,3 @@
-import java.util.HashSet;
 import java.util.List;
 
 public class Runner {
@@ -7,6 +6,8 @@ public class Runner {
         Graph g = new Graph(filePath);
 
         BreadthFirstSearch bfs = new BreadthFirstSearch(g);
-        bfs.FindStartVertices();
+        for(int v : bfs.Search()){
+            System.out.println(v);
+        }
     }
 }

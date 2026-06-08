@@ -1,3 +1,14 @@
+/**
+ * File: BreadthFirstSearch.java
+ * Description: This module defines a BFS and its associated methods.
+ * Author: Stephen Corns
+ * Student ID: 2908741
+ * Email ID: A2908741
+ * AI Tool Used: Y
+ * This is my own work as defined by
+ *    the University's Academic Integrity Policy.
+ **/
+
 import java.util.*;
 
 public class BreadthFirstSearch {
@@ -5,11 +16,19 @@ public class BreadthFirstSearch {
     private Queue<Integer> visitedVertices = new LinkedList<>();
     private Queue<Integer> identifiedVertices = new LinkedList<Integer>();
 
+    /**
+     *
+     * @param g
+     */
     public BreadthFirstSearch(Graph g) {
         this.g = g;
         this.identifiedVertices = FindStartVertices();
     }
 
+    /**
+     *
+     * @return
+     */
     private Queue<Integer> FindStartVertices() {
         // Find subjects without prerequisites
         Queue<Integer> allSubjects = new LinkedList<Integer>();
@@ -25,6 +44,10 @@ public class BreadthFirstSearch {
         return subjectsWithoutPrerequisites;
     }
 
+    /**
+     *
+     * @return
+     */
     public Queue<Integer> Search() {
         while(!identifiedVertices.isEmpty()) {
             int currentVertex = identifiedVertices.poll();

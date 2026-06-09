@@ -38,27 +38,27 @@ public class StudyPlan {
      */
     public List<List<String>> CreateStudyPlan() {
         List<List<String>> studyPlan = new ArrayList<>();
-
+        List<String> periodPlan = new ArrayList<>();
         while (!subjectOrder.isEmpty()) {
-
-            int currentSubjects = 0;
-            List<String> periodPlan = new ArrayList<>();
-
-            while (!subjectOrder.isEmpty() &&
-                    currentSubjects < maxConcurrent ) {
-
-                int subjectId = subjectOrder.peek();
-
-                if (PrerequisitesMet(subjectId)) {
-                    String subject = g.getVertices().get(subjectId).getValue();
-                    periodPlan.add(subject);
-                    subjectOrder.remove();
-                    currentSubjects++;
-                } else {
-                    subjectOrder.add(subjectOrder.remove());
+            int subjectId = subjectOrder.poll();
+            String subject = g.getVertices().get(subjectId).getValue();
+            if(PrerequisitesMet(studyPlan, subject)) {
+                periodPlan.add(subject);
+                if(periodPlan.size() >= maxConcurrent) {
+                    if(!periodPlan.isEmpty()) {
+                        studyPlan.add(periodPlan);
+                    }
+                    periodPlan = new ArrayList<>();
                 }
+            } else {
+                subjectOrder.offer(subjectId);
+                if(!periodPlan.isEmpty()) {
+                    studyPlan.add(periodPlan);
+                }
+                periodPlan = new ArrayList<>();
             }
-
+        }
+        if(!periodPlan.isEmpty()) {
             studyPlan.add(periodPlan);
         }
         return studyPlan;
@@ -66,15 +66,23 @@ public class StudyPlan {
 
     /**
      *
-     * todo: Create code to ensure prerequisites were met in a previous study period
-     * @param subjectId
+     * @param studyPlan
+     * @param subject
      * @return
      */
-    /**
-     * Returns true if ALL prerequisites of subjectId
-     * have already been completed (i.e., not in subjectOrder anymore).
-     */
-    private boolean PrerequisitesMet(int subjectId) {
+    private boolean PrerequisitesMet(List<List<String>> studyPlan, String subject) {
+        List<String> prerequisites = getPrerequisites(subject);
+        for (String prerequisite : prerequisites) {
+            boolean prerequisiteFound = false;
+            for (List<String> periodPlan : studyPlan) {
+                if (periodPlan.contains(prerequisite)) {
+                    prerequisiteFound = true;
+                }
+            }
+            if (!prerequisiteFound) {
+                return false;
+            }
+        }
         return true;
     }
 
@@ -86,5 +94,32 @@ public class StudyPlan {
         for (int i = 0; i < plan.size(); i++) {
             System.out.println("Study period " + (i + 1) + ": " + plan.get(i));
         }
+    }
+
+    /**
+     *
+     * @param subject
+     * @return
+     */
+    public List<String> getPrerequisites(String subject) {
+        List<String> prerequisites = new ArrayList<>();
+        Integer subjectId = null;
+        for (Map.Entry<Integer, Vertex> entry : vertices.entrySet()) {
+            if (entry.getValue().getValue().equals(subject)) {
+                subjectId = entry.getKey();
+                break;
+            }
+        }
+        if (subjectId == null) {
+            return prerequisites; // subject not found
+        }
+        for (List<Edge> edgeList : edges.values()) {
+            for (Edge e : edgeList) {
+                if (e.getTo() == subjectId) {
+                    prerequisites.add(vertices.get(e.getFrom()).getValue());
+                }
+            }
+        }
+        return prerequisites;
     }
 }

@@ -18,8 +18,8 @@ public class Runner {
      * @param args
      */
     public static void main(String[] args) {
-        String filePath = "C:\\Temp\\test_project\\uniSort\\src\\XBIT.txt";
-        int maxConcurrent = 20;
+        String filePath = "C:\\Temp\\test_project\\uniSort\\src\\XBDA.txt";
+        int maxConcurrent = 3;
         Graph g = new Graph(filePath);
 
         BreadthFirstSearch bfs = new BreadthFirstSearch(g);

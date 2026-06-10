@@ -18,9 +18,12 @@ public class Runner {
      * @param args
      */
     public static void main(String[] args) {
-        String filePath = "C:\\Temp\\test_project\\uniSort\\src\\XBDA.txt";
-        int maxConcurrent = 3;
-        Graph g = new Graph(filePath);
+        String filePath = "C:\\Temp\\test_project\\uniSort\\src\\XBIT.txt";
+        CourseFileReader cfr = new CourseFileReader();
+        List<String> courseList = cfr.readFile(filePath);
+
+        int maxConcurrent = 20;
+        Graph g = new Graph(courseList);
 
         BreadthFirstSearch bfs = new BreadthFirstSearch(g);
         Queue<Integer> subjectOrder = bfs.Search();

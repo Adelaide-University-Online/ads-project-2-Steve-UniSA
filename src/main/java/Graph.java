@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Graph {
-    // Create two HashMaps to save vertices and edges. Vertices will be id and vertex object,
-    // while the hashmap of edges will get the vertex id and list of edge objects.
     /**
      * Create two HashMaps to save vertices and edges. Vertices will be id and vertex object,
      * while the hashmap of edges will get the vertex id and list of edge objects.
@@ -26,10 +24,10 @@ public class Graph {
 
     /**
      *
-     * @param filePath
+     * @param courseList
      */
-    public Graph(String filePath) {
-        loadFile(filePath);
+    public Graph(List<String> courseList) {
+        loadList(courseList);
     }
 
     /**
@@ -37,7 +35,7 @@ public class Graph {
      * @param id
      * @param value
      */
-    public void addVertex(int id, String value){
+    private void addVertex(int id, String value){
         vertices.put(id, new Vertex(id,value));
         edges.put(id, new ArrayList<>());
     }
@@ -48,7 +46,7 @@ public class Graph {
      * @param to
      * @param weight
      */
-    public void addEdge(int from, int to, int weight){
+    private void addEdge(int from, int to, int weight){
         edges.get(from).add(new Edge(from,to,weight));
     }
 
@@ -70,12 +68,9 @@ public class Graph {
 
     /**
      *
-     * @param filePath
+     * @param courseList
      */
-    private void loadFile(String filePath){
-        CourseFileReader cfr = new CourseFileReader();
-        List<String> courseList = cfr.readFile(filePath);
-
+    private void loadList(List<String> courseList){
         List<String> subjectsRaw = List.of(courseList.getFirst().split(","));
         ArrayList<String> subjects = new ArrayList<String>();
         int i = 1;

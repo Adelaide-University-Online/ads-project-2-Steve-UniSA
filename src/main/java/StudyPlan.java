@@ -38,29 +38,39 @@ public class StudyPlan {
      */
     public List<List<String>> CreateStudyPlan() {
         List<List<String>> studyPlan = new ArrayList<>();
-        List<String> periodPlan = new ArrayList<>();
+
+        // Process subjects period by period
         while (!subjectOrder.isEmpty()) {
-            int subjectId = subjectOrder.poll();
-            String subject = g.getVertices().get(subjectId).getValue();
-            if(PrerequisitesMet(studyPlan, subject)) {
-                periodPlan.add(subject);
-                if(periodPlan.size() >= maxConcurrent) {
-                    if(!periodPlan.isEmpty()) {
-                        studyPlan.add(periodPlan);
-                    }
-                    periodPlan = new ArrayList<>();
+            List<String> periodPlan = new ArrayList<>();
+
+            int subjectsToProcessThisRound = subjectOrder.size();
+            int processed = 0;
+
+            // Try to fill this period up to maxConcurrent
+            while (processed < subjectsToProcessThisRound && periodPlan.size() < maxConcurrent) {
+                int subjectId = subjectOrder.poll();
+                String subject = g.getVertices().get(subjectId).getValue();
+
+                if (PrerequisitesMet(studyPlan, subject)) {
+                    // All prerequisites are in earlier periods
+                    periodPlan.add(subject);
+                } else {
+                    // Not ready yet, put it back for a later period
+                    subjectOrder.offer(subjectId);
                 }
-            } else {
-                subjectOrder.offer(subjectId);
-                if(!periodPlan.isEmpty()) {
-                    studyPlan.add(periodPlan);
-                }
-                periodPlan = new ArrayList<>();
+                processed++;
             }
-        }
-        if(!periodPlan.isEmpty()) {
+
+            // If we couldn't schedule anything in this period, we’re stuck
+            if (periodPlan.isEmpty()) {
+                throw new IllegalStateException(
+                        "No subjects can be scheduled: cycle or unsatisfiable prerequisites detected."
+                );
+            }
+
             studyPlan.add(periodPlan);
         }
+
         return studyPlan;
     }
 

@@ -12,21 +12,19 @@ class GraphTest {
     void getVertices() {
         List<String> dummyData =  new ArrayList<>();
         dummyData.add("A, B, C");
+        dummyData.add("A, B");
+        dummyData.add("B, C");
         Graph g = new Graph(dummyData);
-        Map<Integer,Vertex> vertices = g.getVertices();
-        assertEquals(3, vertices.size());
+        assertEquals(g.getVertices().toString(), "{1=id=1, value=A, 2=id=2, value=B, 3=id=3, value=C}");
     }
 
     @Test
     void getEdges() {
-//        List<String> dummyData =  new ArrayList<>();
-//        dummyData.add("A, B, C");
-//        dummyData.add("A, B");
-//        dummyData.add("B, C");
-//        Graph g = new Graph(dummyData);
-//        Vertex v = g.getVertices().get(2);
-//        Map<Integer,List<Edge>> e = g.getEdges();
-//        Edge e1 = e.get(0).get(1);
-//        assertEquals(0, e.get(0).size());
+        List<String> dummyData =  new ArrayList<>();
+        dummyData.add("A, B, C");
+        dummyData.add("A, B");
+        dummyData.add("B, C");
+        Graph g = new Graph(dummyData);
+        assertEquals(g.getEdges().toString(), "{1=[], 2=[Edge: {from=2, to=1, weight=1}], 3=[Edge: {from=3, to=2, weight=1}]}");
     }
 }

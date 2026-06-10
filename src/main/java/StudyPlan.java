@@ -111,7 +111,7 @@ public class StudyPlan {
      * @param subject
      * @return
      */
-    public List<String> getPrerequisites(String subject) {
+    private List<String> getPrerequisites(String subject) {
         List<String> prerequisites = new ArrayList<>();
         Integer subjectId = null;
         for (Map.Entry<Integer, Vertex> entry : vertices.entrySet()) {
